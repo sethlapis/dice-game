@@ -2,46 +2,227 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Dice Game</title>
+  <title>Dice & Roulette Game</title>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Luckiest+Guy&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
   <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Fredoka', sans-serif;
+      text-align: center;
+      background: linear-gradient(270deg, #6a5acd, #20b2aa, #ff69b4, #00ced1);
+      background-size: 1200% 1200%;
+      animation: colorShift 30s ease infinite;
+      margin: 0;
+      padding: 40px;
+      color: #fff;
+    }
+    h1 {
+      font-family: 'Luckiest Guy', cursive;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .toggle-buttons {
+      margin-bottom: 30px;
+    }
+    .toggle-buttons button {
+      font-family: 'Luckiest Guy', cursive;
+      font-size: 1.2rem;
+      margin: 0 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 12px;
+      background: #fff;
+      color: #333;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .toggle-buttons button:hover {
+      background: #333;
+      color: #fff;
+    }
+    .dice-section, .roulette-section {
+      display: none;
+      margin-top: 20px;
+    }
+    .dice-container {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      margin: 30px 0;
+    }
+    .die {
+      width: 100px;
+      height: 100px;
+      background-color: #444;
+      border-radius: 20px;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+    }
+    button.roll-btn, button.spin-btn {
+      font-size: 1rem;
+      padding: 10px 20px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 10px;
+      background-color: #fff;
+      color: #333;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
     .color-note {
       font-family: 'Luckiest Guy', cursive;
-      font-size: 1.1rem;
-      color: #fff;
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+      font-size: 1rem;
       transform: rotate(-2deg);
-      margin-top: 25px;
-      letter-spacing: 1px;
-      animation: wiggle 4s infinite ease-in-out;
+      animation: wiggle 4s infinite;
+      margin-top: 20px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
     }
-
     @keyframes wiggle {
       0%, 100% { transform: rotate(-2deg); }
       50% { transform: rotate(2deg); }
     }
+    .roulette-wheel {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 360px;
+      margin: 20px auto;
+    }
+    .roulette-number {
+      width: 60px;
+      height: 60px;
+      margin: 3px;
+      border-radius: 50%;
+      background-color: red;
+      color: white;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fredoka', sans-serif;
+    }
+    .black { background-color: black; }
+    .disabled { opacity: 0.3; pointer-events: auto; }
+    @keyframes colorShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
   </style>
 </head>
 <body>
-  <h1 class="main-title">🎲 DICE GAME</h1>
-  <h2 class="subtitle">ROLL VIRTUAL DICE ONLINE</h2>
-
-  <!-- 🎲 Dice container (ONLY ONCE!) -->
-  <div class="dice-container">
-    <div class="die" id="die1">?</div>
-    <div class="die" id="die2">?</div>
-    <div class="die" id="die3">?</div>
+  <h1>🎮 Game Center</h1>
+  <div class="toggle-buttons">
+    <button onclick="showSection('dice')">🎲 Play Dice</button>
+    <button onclick="showSection('roulette')">🎰 Play Roulette</button>
   </div>
 
-  <!-- 🎲 Button -->
-  <button onclick="revealDice()">🎲 Roll / Reset</button>
+  <!-- Dice Section -->
+  <div class="dice-section" id="diceSection">
+    <h2>🎲 Dice Game</h2>
+    <div class="dice-container">
+      <div class="die" id="die1">?</div>
+      <div class="die" id="die2">?</div>
+      <div class="die" id="die3">?</div>
+    </div>
+    <button class="roll-btn" onclick="revealDice()">🎲 Roll / Reset</button>
+    <p class="color-note">Colors: RED, BLUE, WHITE, GREEN, YELLOW, PINK</p>
+  </div>
 
-  <!-- 🎨 Color Info Text (styled + clean) -->
-  <p class="color-note">Colors: RED, BLUE, WHITE, GREEN, YELLOW, PINK</p>
+  <!-- Roulette Section -->
+  <div class="roulette-section" id="rouletteSection">
+    <h2>🎰 Roulette Game</h2>
+    <div class="roulette-wheel" id="rouletteWheel"></div>
+    <button class="spin-btn" onclick="spinRoulette()">🎰 Spin</button>
+  </div>
 
-  <!-- 🎵 Audio & Script -->
   <audio id="roll-sound" src="roll.mp3" preload="auto"></audio>
-  <script src="script.js"></script>
+
+  <script>
+    const colorMap = { A: 'RED', B: 'BLUE', C: 'WHITE', D: 'GREEN', E: 'YELLOW', F: 'PINK' };
+    const pressedKeys = [];
+    const diceIds = ['die1', 'die2', 'die3'];
+    const rollSound = document.getElementById('roll-sound');
+
+    function showSection(section) {
+      document.getElementById('diceSection').style.display = section === 'dice' ? 'block' : 'none';
+      document.getElementById('rouletteSection').style.display = section === 'roulette' ? 'block' : 'none';
+    }
+
+    function revealDice() {
+      rollSound.currentTime = 0;
+      rollSound.play();
+      diceIds.forEach((id, i) => {
+        const die = document.getElementById(id);
+        die.textContent = '?';
+        die.style.backgroundColor = '#555';
+      });
+      setTimeout(() => {
+        diceIds.forEach((id, i) => {
+          const key = pressedKeys[i];
+          const color = colorMap[key] || '?';
+          const die = document.getElementById(id);
+          die.textContent = color;
+          die.style.backgroundColor = color.toLowerCase();
+        });
+        pressedKeys.length = 0;
+      }, 700);
+    }
+
+    document.addEventListener('keydown', (event) => {
+      const key = event.key.toUpperCase();
+      if (colorMap[key] && pressedKeys.length < 3) pressedKeys.push(key);
+      if (!isNaN(key)) currentInput += key;
+      if (event.key === 'Enter' && currentInput !== '') {
+        disabledNumbers.add(parseInt(currentInput));
+        currentInput = '';
+      }
+    });
+
+    // Roulette
+    let currentInput = '';
+    const disabledNumbers = new Set();
+
+    function createRouletteWheel() {
+      const container = document.getElementById('rouletteWheel');
+      container.innerHTML = '';
+      for (let i = 0; i <= 31; i++) {
+        const div = document.createElement('div');
+        div.className = 'roulette-number ' + (i % 2 === 0 ? 'black' : '');
+        div.textContent = i;
+        div.addEventListener('click', () => {
+          disabledNumbers.delete(i);
+        });
+        container.appendChild(div);
+      }
+    }
+
+    function spinRoulette() {
+      const validNumbers = [];
+      for (let i = 0; i <= 31; i++) {
+        if (!disabledNumbers.has(i)) validNumbers.push(i);
+      }
+      if (validNumbers.length === 0) {
+        alert('All numbers are disabled!');
+        return;
+      }
+      const result = validNumbers[Math.floor(Math.random() * validNumbers.length)];
+      alert('🎯 Landed on: ' + result);
+      disabledNumbers.clear();
+      currentInput = '';
+    }
+
+    // Initial setup
+    createRouletteWheel();
+    showSection('dice');
+  </script>
 </body>
 </html>
