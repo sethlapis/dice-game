@@ -3,22 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <title>Dice Game</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Luckiest+Guy&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
   <style>
-    .color-guide {
-      font-size: 1.2rem;
-      font-weight: bold;
+    .color-note {
+      font-family: 'Luckiest Guy', cursive;
+      font-size: 1.1rem;
       color: #fff;
-      margin-bottom: 20px;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+      transform: rotate(-2deg);
+      margin-top: 25px;
+      letter-spacing: 1px;
+      animation: wiggle 4s infinite ease-in-out;
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(-2deg); }
+      50% { transform: rotate(2deg); }
     }
   </style>
 </head>
 <body>
   <h1 class="main-title">🎲 DICE GAME</h1>
   <h2 class="subtitle">ROLL VIRTUAL DICE ONLINE</h2>
-  <p class="color-guide">You can choose from: RED, BLUE, WHITE, GREEN, YELLOW, PINK</p>
 
   <div class="dice-container">
     <div class="die" id="die1">?</div>
@@ -27,39 +34,10 @@
   </div>
 
   <button onclick="revealDice()">🎲 Roll / Reset</button>
-  <audio id="roll-sound" src="roll.mp3" preload="auto"></audio>
-  <script src="script.js"></script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Dice Game</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    .color-guide {
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #fff;
-      margin-bottom: 20px;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-    }
-  </style>
-</head>
-<body>
-  <h1 class="main-title">🎲 DICE GAME</h1>
-  <h2 class="subtitle">ROLL VIRTUAL DICE ONLINE</h2>
-  <p class="color-guide">You can choose from: RED, BLUE, WHITE, GREEN, YELLOW, PINK</p>
 
-  <div class="dice-container">
-    <div class="die" id="die1">?</div>
-    <div class="die" id="die2">?</div>
-    <div class="die" id="die3">?</div>
-  </div>
+  <!-- 🎨 Color Info Text -->
+  <p class="color-note">Colors to pick: RED, BLUE, WHITE, GREEN, YELLOW, PINK</p>
 
-  <button onclick="revealDice()">🎲 Roll / Reset</button>
   <audio id="roll-sound" src="roll.mp3" preload="auto"></audio>
   <script src="script.js"></script>
 </body>
