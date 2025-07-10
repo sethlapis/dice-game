@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Dice & Roulette Game</title>
+  <title>Dice & Card Game Center</title>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Luckiest+Guy&display=swap" rel="stylesheet">
   <style>
     * {
@@ -42,10 +42,17 @@
       background: #333;
       color: #fff;
     }
-    .dice-section, .roulette-section {
+    .toggle-buttons button.active {
+      background: #333;
+      color: #fff;
+      box-shadow: 0 0 10px #fff;
+    }
+    .dice-section, .card-section {
       display: none;
       margin-top: 20px;
     }
+
+    /* Dice Game Styles */
     .dice-container {
       display: flex;
       justify-content: center;
@@ -64,8 +71,9 @@
       color: white;
       font-weight: bold;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+      user-select: none;
     }
-    button.roll-btn, button.spin-btn {
+    button.roll-btn {
       font-size: 1rem;
       padding: 10px 20px;
       margin-top: 10px;
@@ -76,6 +84,7 @@
       font-weight: bold;
       cursor: pointer;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      user-select: none;
     }
     .color-note {
       font-family: 'Luckiest Guy', cursive;
@@ -84,33 +93,83 @@
       animation: wiggle 4s infinite;
       margin-top: 20px;
       text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+      user-select: none;
     }
     @keyframes wiggle {
       0%, 100% { transform: rotate(-2deg); }
       50% { transform: rotate(2deg); }
     }
-    .roulette-wheel {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      max-width: 360px;
-      margin: 20px auto;
+
+    /* Card Game Styles */
+    .card-container {
+      max-width: 350px;
+      margin: 0 auto;
+      background: rgba(255 255 255 / 0.15);
+      border-radius: 25px;
+      padding: 30px 20px;
+      box-shadow: 0 0 20px rgba(255 255 255 / 0.4);
+      color: #ffeb3b;
+      font-family: 'Luckiest Guy', cursive;
     }
-    .roulette-number {
-      width: 60px;
-      height: 60px;
-      margin: 3px;
-      border-radius: 50%;
-      background-color: red;
-      color: white;
-      font-weight: bold;
+    .cards-row {
       display: flex;
-      align-items: center;
       justify-content: center;
-      font-family: 'Fredoka', sans-serif;
+      gap: 80px;
+      margin-bottom: 25px;
     }
-    .black { background-color: black; }
-    .disabled { opacity: 0.3; pointer-events: auto; }
+    .player, .opponent {
+      background: #ff9800cc;
+      border-radius: 20px;
+      padding: 20px;
+      width: 140px;
+      box-shadow: 0 0 20px #ff9800aa;
+      user-select: none;
+    }
+    .label {
+      font-weight: 700;
+      margin-bottom: 12px;
+      font-size: 1.4em;
+      color: #fff3e0;
+    }
+    .card {
+      font-size: 110px;
+      user-select: none;
+      border: 5px solid #ffd54f;
+      border-radius: 20px;
+      background: linear-gradient(145deg, #ffecb3, #ffd54f);
+      color: #5d4037;
+      width: 130px;
+      height: 180px;
+      line-height: 180px;
+      margin: 0 auto;
+      box-shadow: inset 0 0 20px #fbc02d;
+    }
+    button.draw-btn {
+      font-family: 'Luckiest Guy', cursive;
+      font-size: 22px;
+      padding: 14px 40px;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      background: #ffd54f;
+      color: #5d4037;
+      box-shadow: 0 5px 0 #c49000;
+      transition: background 0.3s ease;
+      user-select: none;
+    }
+    button.draw-btn:hover {
+      background: #c49000;
+      color: #fff;
+    }
+    .result {
+      font-size: 28px;
+      margin-top: 20px;
+      font-weight: 700;
+      color: #ffeb3b;
+      text-shadow: 1px 1px 4px #5d4037;
+      height: 36px;
+    }
+
     @keyframes colorShift {
       0%   { background-position: 0% 50%; }
       50%  { background-position: 100% 50%; }
@@ -123,34 +182,17 @@
       75%  { transform: rotate(540deg) scale(1.1); }
       100% { transform: rotate(720deg) scale(1); }
     }
-    #winningNumber {
-      display: none;
-      font-size: 3rem;
-      margin-top: 20px;
-      font-family: 'Luckiest Guy', cursive;
-    }
-    #winningNumber.show {
-      animation: popIn 0.5s ease;
-      display: block;
-      color: gold;
-      text-shadow: 2px 2px 10px black;
-    }
-    @keyframes popIn {
-      0% { transform: scale(0); opacity: 0; }
-      60% { transform: scale(1.2); opacity: 1; }
-      100% { transform: scale(1); }
-    }
   </style>
 </head>
 <body>
   <h1>🎮 Game Center</h1>
   <div class="toggle-buttons">
-    <button onclick="showSection('dice')">🎲 Play Dice</button>
-    <button onclick="showSection('roulette')">🎰 Play Roulette</button>
+    <button id="btnDice" class="active">🎲 Play Dice</button>
+    <button id="btnCard">🃏 Play Card</button>
   </div>
 
   <!-- Dice Section -->
-  <div class="dice-section" id="diceSection">
+  <div class="dice-section" id="diceSection" style="display: block;">
     <h2>🎲 Dice Game</h2>
     <div class="dice-container">
       <div class="die" id="die1">?</div>
@@ -161,30 +203,52 @@
     <p class="color-note">Colors: RED, BLUE, WHITE, GREEN, YELLOW, PINK</p>
   </div>
 
-  <!-- Roulette Section -->
-  <div class="roulette-section" id="rouletteSection">
-    <h2>🎰 Roulette Game</h2>
-    <div class="roulette-wheel" id="rouletteWheel"></div>
-    <div id="winningNumber"></div>
-    <button class="spin-btn" onclick="spinRoulette()">🎰 Spin</button>
+  <!-- Card Section -->
+  <div class="card-section" id="cardSection">
+    <h2>🃏 1v1 Card Showdown</h2>
+    <div class="card-container">
+      <div class="cards-row">
+        <div class="player">
+          <div class="label">You</div>
+          <div class="card" id="playerCard">?</div>
+        </div>
+        <div class="opponent">
+          <div class="label">Opponent</div>
+          <div class="card" id="opponentCard">?</div>
+        </div>
+      </div>
+      <button class="draw-btn" id="drawBtn">Draw Cards</button>
+      <div class="result" id="resultText"></div>
+    </div>
   </div>
 
-  <audio id="roll-sound" src="roll.mp3" preload="auto"></audio>
-
   <script>
+    /* --- Toggle Sections --- */
+    const btnDice = document.getElementById('btnDice');
+    const btnCard = document.getElementById('btnCard');
+    const diceSection = document.getElementById('diceSection');
+    const cardSection = document.getElementById('cardSection');
+
+    btnDice.addEventListener('click', () => {
+      diceSection.style.display = 'block';
+      cardSection.style.display = 'none';
+      btnDice.classList.add('active');
+      btnCard.classList.remove('active');
+    });
+
+    btnCard.addEventListener('click', () => {
+      diceSection.style.display = 'none';
+      cardSection.style.display = 'block';
+      btnCard.classList.add('active');
+      btnDice.classList.remove('active');
+    });
+
+    /* --- Dice Game Logic --- */
     const colorMap = { A: 'RED', B: 'BLUE', C: 'WHITE', D: 'GREEN', E: 'YELLOW', F: 'PINK' };
     const pressedKeys = [];
     const diceIds = ['die1', 'die2', 'die3'];
-    const rollSound = document.getElementById('roll-sound');
-
-    function showSection(section) {
-      document.getElementById('diceSection').style.display = section === 'dice' ? 'block' : 'none';
-      document.getElementById('rouletteSection').style.display = section === 'roulette' ? 'block' : 'none';
-    }
 
     function revealDice() {
-      rollSound.currentTime = 0;
-      rollSound.play();
       diceIds.forEach((id, i) => {
         const die = document.getElementById(id);
         die.textContent = '?';
@@ -207,54 +271,111 @@
     document.addEventListener('keydown', (event) => {
       const key = event.key.toUpperCase();
       if (colorMap[key] && pressedKeys.length < 3) pressedKeys.push(key);
-      if (!isNaN(key)) currentInput += key;
-      if (event.key === 'Enter' && currentInput !== '') {
-        disabledNumbers.add(parseInt(currentInput));
-        currentInput = '';
-      }
     });
 
-    // Roulette
-    let currentInput = '';
-    const disabledNumbers = new Set();
+    /* --- Card Game Logic --- */
+    // Cards: A(14),2(2),3(3),...10(10),J(11),Q(12),K(13)
+    const cards = [
+      {rank: 14, display: 'A'}, 
+      {rank: 2, display: '2'},
+      {rank: 3, display: '3'},
+      {rank: 4, display: '4'},
+      {rank: 5, display: '5'},
+      {rank: 6, display: '6'},
+      {rank: 7, display: '7'},
+      {rank: 8, display: '8'},
+      {rank: 9, display: '9'},
+      {rank: 10, display: '10'},
+      {rank: 11, display: 'J'},
+      {rank: 12, display: 'Q'},
+      {rank: 13, display: 'K'},
+    ];
 
-    function createRouletteWheel() {
-      const container = document.getElementById('rouletteWheel');
-      container.innerHTML = '';
-      for (let i = 0; i <= 31; i++) {
-        const div = document.createElement('div');
-        div.className = 'roulette-number ' + (i % 2 === 0 ? 'black' : '');
-        div.textContent = i;
-        div.addEventListener('click', () => {
-          disabledNumbers.delete(i);
-        });
-        container.appendChild(div);
+    const playerCardDiv = document.getElementById('playerCard');
+    const opponentCardDiv = document.getElementById('opponentCard');
+    const drawBtn = document.getElementById('drawBtn');
+    const resultText = document.getElementById('resultText');
+
+    // Modes: 1 = win, 2 = lose, 3 = draw, 0 = random
+    let mode = 0;
+
+    function getRandomCard() {
+      return cards[Math.floor(Math.random() * cards.length)];
+    }
+
+    function findCardByRank(rank) {
+      return cards.find(c => c.rank === rank);
+    }
+
+    function compareRanks(a, b) {
+      if (a.rank > b.rank) return 1;
+      else if (a.rank < b.rank) return -1;
+      return 0;
+    }
+
+    function pickCards(mode) {
+      let playerCard, opponentCard;
+
+      if (mode === 1) {
+        opponentCard = getRandomCard();
+        let possibleWins = cards.filter(c => c.rank > opponentCard.rank);
+        if (possibleWins.length === 0) return pickCards(3);
+        playerCard = possibleWins[Math.floor(Math.random() * possibleWins.length)];
+      } else if (mode === 2) {
+        playerCard = getRandomCard();
+        let possibleLosses = cards.filter(c => c.rank > playerCard.rank);
+        if (possibleLosses.length === 0) return pickCards(3);
+        opponentCard = possibleLosses[Math.floor(Math.random() * possibleLosses.length)];
+      } else if (mode === 3) {
+        playerCard = getRandomCard();
+        opponentCard = findCardByRank(playerCard.rank);
+      } else {
+        playerCard = getRandomCard();
+        opponentCard = getRandomCard();
+      }
+
+      return {playerCard, opponentCard};
+    }
+
+    function cardDisplayText(card) {
+      return card.display;
+    }
+
+    function updateResultText(playerCard, opponentCard) {
+      const cmp = compareRanks(playerCard, opponentCard);
+      if (cmp > 0) {
+        resultText.textContent = 'You Win! 🎉';
+        resultText.style.color = '#28a745';
+      } else if (cmp < 0) {
+        resultText.textContent = 'You Lose! 😞';
+        resultText.style.color = '#dc3545';
+      } else {
+        resultText.textContent = "It's a Draw! 🤝";
+        resultText.style.color = '#ffc107';
       }
     }
 
-    function spinRoulette() {
-      const validNumbers = [];
-      for (let i = 0; i <= 31; i++) {
-        if (!disabledNumbers.has(i)) validNumbers.push(i);
+    drawBtn.addEventListener('click', () => {
+      const {playerCard, opponentCard} = pickCards(mode);
+      playerCardDiv.textContent = cardDisplayText(playerCard);
+      opponentCardDiv.textContent = cardDisplayText(opponentCard);
+      updateResultText(playerCard, opponentCard);
+    });
+
+    window.addEventListener('keydown', (e) => {
+      // Only react if card game is visible
+      if (cardSection.style.display === 'block') {
+        if (e.key === '1') {
+          mode = 1;
+        } else if (e.key === '2') {
+          mode = 2;
+        } else if (e.key === '3') {
+          mode = 3;
+        } else if (e.key === '0') {
+          mode = 0;
+        }
       }
-      if (validNumbers.length === 0) {
-        alert('All numbers are disabled!');
-        return;
-      }
-      const result = validNumbers[Math.floor(Math.random() * validNumbers.length)];
-
-      const display = document.getElementById('winningNumber');
-      display.textContent = `🎯 ${result} 🎯`;
-      display.classList.add('show');
-      setTimeout(() => display.classList.remove('show'), 2000);
-
-      disabledNumbers.clear();
-      currentInput = '';
-    }
-
-    // Initial setup
-    createRouletteWheel();
-    showSection('dice');
+    });
   </script>
 </body>
 </html>
