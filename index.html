@@ -31,3 +31,36 @@
   <script src="script.js"></script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dice Game</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .color-guide {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #fff;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+<body>
+  <h1 class="main-title">🎲 DICE GAME</h1>
+  <h2 class="subtitle">ROLL VIRTUAL DICE ONLINE</h2>
+  <p class="color-guide">You can choose from: RED, BLUE, WHITE, GREEN, YELLOW, PINK</p>
+
+  <div class="dice-container">
+    <div class="die" id="die1">?</div>
+    <div class="die" id="die2">?</div>
+    <div class="die" id="die3">?</div>
+  </div>
+
+  <button onclick="revealDice()">🎲 Roll / Reset</button>
+  <audio id="roll-sound" src="roll.mp3" preload="auto"></audio>
+  <script src="script.js"></script>
+</body>
+</html>
