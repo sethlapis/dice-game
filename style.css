@@ -1,0 +1,95 @@
+body {
+  font-family: 'Fredoka', sans-serif;
+  text-align: center;
+  background: linear-gradient(270deg,
+    #cbaaff,
+    #ffc4e1,
+    #baffc9,
+    #a0e7e5,
+    #d4a5ff,
+    #cbaaff
+  );
+  background-size: 1200% 1200%;
+  animation: colorShift 30s ease infinite;
+  padding: 40px;
+  color: #fff;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.main-title {
+  font-size: 3.5rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-shadow: 2px 3px 0 #333;
+  color: #fff900;
+  letter-spacing: 2px;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  color: #ffffff;
+  text-shadow: 1px 1px 3px #000;
+  margin-bottom: 40px;
+}
+
+.dice-container {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin: 40px 0;
+}
+
+.die {
+  width: 120px;
+  height: 120px;
+  border-radius: 20px;
+  background-color: #444;
+  border: none;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  text-shadow: 1px 1px 3px black;
+}
+
+.die:not(:empty):not(:hover) {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+}
+
+button {
+  font-size: 18px;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 10px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #333;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+@keyframes rollAnim {
+  0%   { transform: rotate(0deg) scale(1); }
+  25%  { transform: rotate(180deg) scale(1.1); }
+  50%  { transform: rotate(360deg) scale(1); }
+  75%  { transform: rotate(540deg) scale(1.1); }
+  100% { transform: rotate(720deg) scale(1); }
+}
+
+@keyframes colorShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
